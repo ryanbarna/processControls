@@ -1,23 +1,23 @@
 #include <iostream>
 #include <string>
-#include <vector>
+#include <cmath>
 
-using std::cout, std::vector, std::cin;
+using std::cout, std::cin, std::abs;
 
-float setPoint;
-float processMeasurement;
+double setPoint;
+double processMeasurement;
 
 // Compute difference between the desired system state and the actual system state
-float measureError( float setPoint, float processMeasurement )
+double measureError( double setPoint, double processMeasurement )
 {
-     float error = setPoint - processMeasurement;
+     double error = setPoint - processMeasurement;
      return error;
 }
 
 // Compute PID controller response
-float controllerOutput( float gain, float tauI, float tauD, float integratedError, float derivedError )
+double controllerOutput( double gain, double tauI, double tauD, double integratedError, double derivedError )
 {
-    float controllerOutput =+ gain * (((1/tauI) * integratedError) + (tauD * derivedError));
+    double controllerOutput =+ gain * (((1/tauI) * integratedError) + (tauD * derivedError));
     return controllerOutput;
 }
 
@@ -27,30 +27,29 @@ int main()
     // n = rand() % randomNumberLimit;
 
     // Take user input for setpoint
+    cout << "Enter the desired process setpoint (i.e. 50.0)" << "\n";
     cin >> setPoint;
     
     // processMeasurement = rand() % randomNumberLimit;
     processMeasurement = 150.0;
     
     // Initialize time steps
-    float i = 0.0;
-    float sampleRate = 1.5;
+    int i = 0;
+    double dt = 1.5;
 
     // Initialize error terms
-    float integratedError = 0.0;
-    float derivedError = 0.0;
+    double integratedError = 0.0;
+    double derivedError = 0.0;
 
-    while ( processMeasurement != setPoint )
+    while ( abs(setPoint - processMeasurement) > 0.1 )
     {
-        
-        float e = measureError( setPoint, processMeasurement );
-        int dt = sampleRate;
+        double e = measureError( setPoint, processMeasurement );
 
         integratedError = e * dt;
 
         derivedError = e / dt;
 
-        float co = controllerOutput( 1.0, 1.0, 0.50, integratedError, derivedError );
+        double co = controllerOutput( 1.0, 1.0, 0.5, integratedError, derivedError );
             
         processMeasurement = processMeasurement + co;
         i++;
