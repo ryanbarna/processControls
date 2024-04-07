@@ -1,0 +1,5 @@
+# VSCode config files
+/.vscode
+
+# Executable
+processControls
