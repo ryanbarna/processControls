@@ -28,7 +28,6 @@ int main()
 
     // Take user input for setpoint
     cin >> setPoint;
-    // setPoint = 30.0;
     
     // processMeasurement = rand() % randomNumberLimit;
     processMeasurement = 150.0;
