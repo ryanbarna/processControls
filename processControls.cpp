@@ -15,22 +15,18 @@ double measureError( double setPoint, double processMeasurement )
 }
 
 // Compute PID controller response
-double controllerOutput( double gain, double tauI, double tauD, double integratedError, double derivedError )
+double controllerOutput( double gain, double tauI, double tauD, double error, double integratedError, double derivedError )
 {
-    double controllerOutput =+ gain * (((1/tauI) * integratedError) + (tauD * derivedError));
+    double controllerOutput = gain * (error + ((1/tauI) * integratedError) + (tauD * derivedError));
     return controllerOutput;
 }
 
 int main()
 {
-    // int randomNumberLimit = 200;
-    // n = rand() % randomNumberLimit;
-
     // Take user input for setpoint
-    cout << "Enter the desired process setpoint (i.e. 50.0)" << "\n";
+    cout << "Enter the desired process setpoint (i.e. 50.0):" << "\n";
     cin >> setPoint;
     
-    // processMeasurement = rand() % randomNumberLimit;
     processMeasurement = 150.0;
     
     // Initialize time steps
@@ -41,27 +37,29 @@ int main()
     double integratedError = 0.0;
     double derivedError = 0.0;
 
+    // Iteratively apply the control algorithm
+    // Stop when process is within 0.1 units of the setpoint
     while ( abs(setPoint - processMeasurement) > 0.1 )
     {
         double e = measureError( setPoint, processMeasurement );
 
-        integratedError = e * dt;
+        // Integrate and derive the system error
+        // integratedError = e * dt;
+        // derivedError = e / dt;
 
-        derivedError = e / dt;
-
-        double co = controllerOutput( 1.0, 1.0, 0.5, integratedError, derivedError );
-            
+        // Compute and apply controller response to the process measurement
+        double co = controllerOutput( 1.0, 1.0, 0.5, e, integratedError, derivedError ); 
         processMeasurement = processMeasurement + co;
         i++;
 
-        cout << e << "\n";
+        // Print
         cout << "Controller Response: " << co << "\n";
         cout << "Setpoint: " << setPoint << ", Process Measurement: " << processMeasurement << "\n";
         cout << "Iteration: " << i;
         cout << "\n";
     }
 
-    cout << "Iterations " << i << "\n";
+    cout << "Total iterations " << i << "\n";
 
     return 0;
 }
