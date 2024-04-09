@@ -2,7 +2,9 @@
 #include <string>
 #include <cmath>
 
-using std::cout, std::cin, std::abs;
+using std::cout;
+using std::cin;
+using std::abs;
 
 double setPoint;
 double processMeasurement;
@@ -15,9 +17,9 @@ double measureError( double setPoint, double processMeasurement )
 }
 
 // Compute PID controller response
-double controllerOutput( double gain, double tauI, double tauD, double error, double integratedError, double derivedError )
+double computeControllerOutput( double gain, double tauI, double tauD, double error, double integratedError, double derivedError )
 {
-    double controllerOutput = gain * (error + ((1/tauI) * integratedError) + (tauD * derivedError));
+    double controllerOutput = gain * (error + ((1.0/tauI) * integratedError) + (tauD * derivedError));
     return controllerOutput;
 }
 
@@ -48,7 +50,7 @@ int main()
         derivedError = e / dt;
 
         // Compute and apply controller response to the process measurement
-        double co = controllerOutput( 1.0, 4.0, 0.1, e, integratedError, derivedError ); 
+        double co = computeControllerOutput( 1.0, 4.0, 0.1, e, integratedError, derivedError ); 
         processMeasurement = processMeasurement + co;
         i++;
 
@@ -61,11 +63,10 @@ int main()
         // Print
         cout << "Controller Response: " << co << "\n";
         cout << "Setpoint: " << setPoint << ", Process Measurement: " << processMeasurement << "\n";
-        cout << "Iteration: " << i;
-        cout << "\n";
+        cout << "Iteration: " << i << "\n";
     }
 
-    cout << "Total iterations " << i << "\n";
+    cout << "Total iterations: " << i << "\n";
 
     return 0;
 }
