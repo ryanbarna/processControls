@@ -55,7 +55,7 @@ int main()
         i++;
 
         // Introduce external process changes
-        if ( i >= 1 && i <= 8)
+        if ( i >= 1 && i <= 8 )
         {
             processMeasurement += 1;
         }
